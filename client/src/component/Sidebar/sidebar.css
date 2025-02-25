@@ -1,0 +1,145 @@
+.sidebar {
+  width: 20vw;
+  height: 100%;
+  padding: 10px;
+  overflow-y: auto;
+  position: fixed;
+  border-right: 1px solid grey;
+}
+
+.sidebar img{
+    margin: 15px 15px;
+    margin-bottom: 0;
+}
+
+.sidebar h4 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+ul {
+  height: 80%;
+  width: 100%;
+  padding: 0px 10px;
+  list-style: none;
+  margin-top: 30px;
+  font-size: 1.1rem;
+}
+ul li {
+  line-height: 40px;
+}
+
+ul li a {
+  position: relative;
+  color: rgb(28, 27, 27);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.2rem;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+  height: 9vh;
+  border-left: 3px solid transparent;
+}
+ul li.active a {
+  color: cyan;
+  background: #dfdfdf;
+  border-left-color: cyan;
+}
+ul li a:hover {
+  background: white;
+}
+ul ul {
+  position: static;
+  display: none;
+}
+ul .feat-show.show {
+  display: block;
+}
+ul .serv-show.show1 {
+  display: block;
+}
+ul ul li {
+  border-top: none;
+}
+ul ul li a {
+  font-size: 1.1rem;
+  color: black;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+ul li.active ul li a {
+  color: black;
+  background: white;
+  border-left-color: transparent;
+}
+ul ul li a:hover {
+  color: cyan !important;
+  background: white !important;
+}
+ul li a span {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-size: 22px;
+  transition: transform 0.4s;
+}
+.rotate {
+  display: flex;
+  margin-left: auto; 
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotate-open {
+  transform: rotate(180deg);
+}
+
+.feat-show-admin {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+.nested-menu {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.feat-btn-admin {
+  border: none;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-weight: 500;
+}
+.nested-item {
+  border: none;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-weight: 500;
+}
+
+.feat-show-admin.show {
+  display: block;
+  margin: 0;
+}
+.nested-menu.show {
+  display: block;
+  margin: 0;
+}
+
+.serv-show-admin {
+  display: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.serv-show-admin.show1 {
+  display: block;
+}
+
+.bullet {
+  font-size: 0.4rem;
+  color: #666666;
+}
