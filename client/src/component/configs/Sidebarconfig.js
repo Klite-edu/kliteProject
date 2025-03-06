@@ -32,8 +32,50 @@ const sidebarConfig = {
     { name: "Notification", path: "/chatbox", icon: faCog },
   ],
   client: [
+    { name: "Dashboard", path: "/dashboard", icon: faChartBar },
     {
-      name: "CRM",
+      name: "Checklist",
+      path: "/checklist",
+      icon: faChartBar,
+      options: [
+        { name: "Task List", path: "/check-tasklist", icon: faCog },
+        { name: "Add Task", path: "/check-addtask", icon: faCog },
+      ],
+    },
+    {
+      name: "Pipline",
+      path: "/dashboard",
+      icon: faCog,
+      options: [
+        { name: "Dashboard", path: "/dashboard", icon: faTachometerAlt },
+        { name: "Permissions", path: "/permissions", icon: faCog },
+        {
+          name: "Contact Managment",
+          path: "/contactmgmt",
+          icon: faCog,
+          options: [
+            { name: "Contacts", path: "/contactmgmt/contacts", icon: faCog },
+            { name: "Companies", path: "/contactmgmt/clients", icon: faCog },
+          ],
+        },
+        { name: "Deals", path: "/clients", icon: faCog },
+        { name: "Leads", path: "/crm/leads", icon: faCog },
+        { name: "Pipeline", path: "/clients", icon: faCog },
+        { name: "Projects", path: "/clients" },
+        { name: "Tasks", path: "/clients" },
+        { name: "Proposals", path: "/clients" },
+        { name: "Contracts", path: "/clients" },
+        { name: "Invoices", path: "/clients" },
+        { name: "Payments", path: "/clients" },
+        { name: "Analytics", path: "/clients" },
+      ],
+    },
+    { name: "Task Delegation (UD)", path: "/task-delegation", icon: faChartBar },
+
+    { name: "NBD-Sales WA-Bot(UD)", path: "", icon: faChartBar },
+    { name: "HRM", path: "/checklist", icon: faChartBar },
+    {
+      name: "Pipline",
       path: "/dashboard",
       icon: faCog,
       options: [
@@ -72,6 +114,13 @@ const sidebarConfig = {
   ],
   user: [
     { name: "Dashboard", path: "/dashboard", icon: faTachometerAlt },
+    {
+      name: "Checklist",
+      path: "/checklist",
+      icon: faChartBar,
+      options: [{ name: "Task List", path: "/check-tasklist", icon: faCog }],
+    },
+    { name: "Attendence", path: "/attendance", icon: faCog },
     { name: "Support", path: "/support", icon: faLifeRing },
     { name: "Reports", path: "/reports", icon: faChartBar },
     { name: "Calendar", path: "/calendar", icon: faChartBar },

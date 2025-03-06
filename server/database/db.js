@@ -1,14 +1,29 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-// Connect to MongoDB (Single Database)
-const db = mongoose.createConnection(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+// ✅ Ensure environment variable exists
+const MONGO_URI = process.env.MONGO_URI;
 
-db.on("connected", () => console.log("✅ Connected to Admin database"));
-db.on("error", (err) => console.error("❌ Error connecting to Admin database:", err));
+// ✅ Connect to MongoDB (Single Database)
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // ✅ Increase timeout to 30 seconds
+      socketTimeoutMS: 45000 // ✅ Keep connection alive longer
+    });
 
-// Export the connection if needed
-module.exports = db;
+    console.log("✅ Connected to MongoDB successfully!");
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:", error);
+    process.exit(1); // Exit process if connection fails
+  }
+};
+
+// ✅ Run connection function
+connectDB();
+
+// ✅ Export mongoose instance
+module.exports = mongoose;
+

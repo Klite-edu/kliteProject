@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const  verifyToken  = require("../middlewares/auth");
+const User = require("../models/clients/contactdata")
 
 router.post("/register", async (req, res) => {
   try {

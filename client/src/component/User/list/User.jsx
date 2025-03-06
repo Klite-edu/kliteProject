@@ -16,7 +16,7 @@ import { Dropdown } from "react-bootstrap";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 const User = () => {
   const [user, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +31,7 @@ const User = () => {
   useEffect(() => {
     const fetchusers = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/users/userData`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/userData`);
         setUsers(response.data);
         console.log("Admin user list", response.data);
       } catch (error) {
@@ -60,7 +60,7 @@ const User = () => {
   const handleDelete = async (id) => {
     try {
       if (window.confirm("Do you want to delete this user?")) {
-        await axios.delete(`${apiUrl}/api/user/delete/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/user/delete/${id}`);
         setUsers(user.filter((user) => user._id !== id));
       }
     } catch (error) {

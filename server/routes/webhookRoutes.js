@@ -1,12 +1,14 @@
 const express = require("express");
 const axios = require("axios");
+require("dotenv").config();  // Load environment variables
 
 const router = express.Router();
 
-// ✅ Use Temporary Meta API Keys
-const VERIFY_TOKEN = "klite";
-const ACCESS_TOKEN = "EAAQbIOw0W3oBOZBmL7HO5ttnYZAIyce0p32Ox3AfQR7enZChKZBk3lgYpycclLvzAzxBbfHHmo85y2pbHn20MpMC3egP6oXCEmMoQiEJLL2A8P9G4rgdQq8aP06CsI18eb0Tj8S8I1uqkiQcQBtPqVV2W8FtbMkvotdGwn2elmdts5gWcgq7et5cq7N8544kZBAZDZD"; // Get from Meta
-const PHONE_NUMBER_ID = "597558170097606"; // Get from Meta
+// ✅ Environment Variables
+const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "klite";
+const ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;  // From .env
+const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_ID || "514616105077754"; // Meta API
+const CHATBOT_API_URL = "https://chatbot.autopilotmybusiness.com/chat";  // 🔹 Your chatbot API URL
 
 // ✅ Webhook Verification (Required for Meta API)
 router.get("/webhook", (req, res) => {
@@ -25,46 +27,70 @@ router.get("/webhook", (req, res) => {
   }
 });
 
+// ✅ Webhook to Receive WhatsApp Messages and Forward to Chatbot API
+router.post("/webhook", async (req, res) => {
+  console.log("📩 Incoming Webhook Event:", JSON.stringify(req.body, null, 2));
 
-// ✅ Webhook to Receive WhatsApp Messages
-router.post("/webhook", (req, res) => {
-  if (req.body.object) {
-    const entry = req.body.entry[0]?.changes[0]?.value;
-    if (entry?.messages) {
-      const message = entry.messages[0];
-      const senderPhone = message.from;
-      const messageText = message.text.body;
+  if (req.body.object && req.body.entry) {
+    req.body.entry.forEach((entry) => {
+      entry.changes.forEach((change) => {
+        const value = change.value;
+        if (value.messages) {
+          value.messages.forEach(async (message) => {
+            const senderPhone = message.from;
+            const messageText = message.text?.body || "[No Text]";
 
-      console.log(`📩 New Message from ${senderPhone}: ${messageText}`);
-    }
+            console.log(`📩 New Message from ${senderPhone}: ${messageText}`);
+
+            try {
+              // ✅ Forward Message to Chatbot API
+              const chatbotResponse = await axios.post(CHATBOT_API_URL, { message: messageText });
+              
+              const chatbotReply = chatbotResponse.data.response;
+              console.log(`🤖 Chatbot Reply: ${chatbotReply}`);
+
+              // ✅ Send Chatbot Response to WhatsApp
+              await sendWhatsAppMessage(senderPhone, chatbotReply);
+
+            } catch (error) {
+              console.error("❌ Error communicating with chatbot API:", error.message);
+            }
+          });
+        }
+      });
+    });
+
     res.sendStatus(200);
   } else {
     res.sendStatus(404);
   }
 });
 
-// ✅ Send a Test WhatsApp Message
-router.post("/send-message", async (req, res) => {
-  const { phone, message } = req.body;
-
+// ✅ Function to Send WhatsApp Message
+async function sendWhatsAppMessage(to, message) {
   try {
-    await axios.post(
+    const response = await axios.post(
       `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
       {
         messaging_product: "whatsapp",
-        to: phone,
+        to: to,
         type: "text",
         text: { body: message },
       },
-      { headers: { Authorization: `Bearer ${ACCESS_TOKEN}` } }
+      {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
 
-    res.status(200).json({ success: true, message: "Message sent!" });
+    console.log("✅ Message Sent Successfully:", response.data);
+    return response.data;
   } catch (error) {
     console.error("❌ Error sending message:", error.response?.data || error.message);
-    res.status(500).json({ success: false, error: "Failed to send message" });
+    throw error;
   }
-});
+}
 
 module.exports = router;
-

@@ -176,6 +176,7 @@
 // });
 
 
+
 // module.exports = router;
 
 const express = require("express");
@@ -187,6 +188,7 @@ dotenv.config();
 const router = express.Router();
 const Client = require("../../models/Admin/client-modal");
 const verifyToken = require("../../middlewares/auth");
+const Employee = require("../../models/clients/contactdata");
 
 // Register Route
 router.post("/register", async (req, res) => {
@@ -224,39 +226,47 @@ router.post("/login", async (req, res) => {
   console.log(`Login attempt for email: ${email}`);
 
   try {
+    // ✅ Find user in Admin, Client, or Employee collections
     const admin =
-      (await Admin.findOne({ email })) || (await Client.findOne({ email })) || (await User.findOne({ email }));
-    console.log("admin email", admin);
+      (await Admin.findOne({ email })) || 
+      (await Client.findOne({ email })) || 
+      (await Employee.findOne({ email }));
+
+    console.log("🔍 Found user:", admin);
 
     if (!admin) {
-      console.log(`Invalid email or password for email: ${email}`);
+      console.log(`❌ Invalid email or password for email: ${email}`);
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Compare entered password with hashed password
+    // ✅ Compare entered password with hashed password
     const isMatch = await bcrypt.compare(password, admin.password);
-    console.log("match password", isMatch);
+    console.log("🔑 Password Match:", isMatch);
     
     if (!isMatch) {
-      console.log(`Invalid password attempt for email: ${email}`);
+      console.log(`❌ Invalid password attempt for email: ${email}`);
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // ✅ Generate JWT Token
     const token = jwt.sign(
-      { adminId: admin._id, role: admin.role },
+      { id: admin._id, role: admin.role }, // Send `id` in token
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    console.log("token", token);
+    console.log("✅ Generated Token:", token);
 
-    console.log(`Login successful for email: ${email}`);
+    console.log(`✅ Login successful for email: ${email}`);
 
-    res.json({ token });
+    // ✅ Send both `token` and `userId` in response
+    res.json({ token, userId: admin._id, role: admin.role });
+
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error("❌ Error during login:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Dashboard Route (Client access only)
 router.get("/dashboard", verifyToken, (req, res) => {

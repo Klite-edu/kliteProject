@@ -7,7 +7,7 @@ import Navbar from "../../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown } from "react-bootstrap";
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const UserCreate = () => {
   const [user, setUser] = useState({
@@ -36,7 +36,7 @@ const UserCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiUrl}/api/users/add`, user);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/add`, user);
       console.log("user added:", response.data);
       localStorage.setItem("userRole", user.role); // Store role in local storage
       navigate("/users"); // Redirect to users list page after creation

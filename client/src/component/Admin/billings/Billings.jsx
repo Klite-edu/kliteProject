@@ -16,7 +16,7 @@ import ReactPaginate from "react-paginate";
 import { Dropdown } from "react-bootstrap";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const billingData = [
     { id: 1, name: "John Doe", amount: "$100", date: "2024-02-01", status: "Paid" },

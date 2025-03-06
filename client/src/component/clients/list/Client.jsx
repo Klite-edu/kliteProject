@@ -16,7 +16,7 @@ import { Dropdown } from "react-bootstrap";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 const Client = () => {
   const [clients, setClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +31,7 @@ const Client = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/clients/clientData`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/clientData`);
         setClients(response.data);
         console.log("Client list", response.data);
       } catch (error) {
@@ -64,7 +64,7 @@ const Client = () => {
   const handleDelete = async (id) => {
     try {
       if (window.confirm("Do you want to delete this client?")) {
-        await axios.delete(`${apiUrl}/api/clients/delete/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/clients/delete/${id}`);
         setClients(clients.filter((client) => client._id !== id));
       }
     } catch (error) {

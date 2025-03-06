@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-const apiUrl = "http://localhost:5000";
+import "./userdashboard.css";
 
 const UserDashboard = ({ onSave, permissions }) => {
   const [user, setUser] = useState(null);
@@ -15,7 +14,7 @@ const UserDashboard = ({ onSave, permissions }) => {
           return;
         }
 
-        const response = await axios.get(`${apiUrl}/api/users/userData/${loggedInEmail}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/userData/${loggedInEmail}`);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user data", error);
@@ -31,10 +30,11 @@ const UserDashboard = ({ onSave, permissions }) => {
   };
 
   return (
-    <>
+    <div className="user-dashboard">
       {user ? (
-        <div>
-          <table>
+        <div className="user-data">
+          <h1>User Dashboard</h1>
+          <table className="user-table">
             <thead>
               <tr>
                 <th>Name</th>
@@ -46,19 +46,19 @@ const UserDashboard = ({ onSave, permissions }) => {
             </thead>
             <tbody>
               <tr>
-                <td>{user.name}</td>
+                <td>{user.fullName}</td>
                 <td>{user.status}</td>
                 <td>{user.role}</td>
                 <td>{user.email}</td>
-                <td>{user.mobileNumber}</td>
+                <td>{user.number}</td>
               </tr>
             </tbody>
           </table>
         </div>
       ) : (
-        <p>Loading user data...</p>
+        <p className="loading-message">Loading user data...</p>
       )}
-    </>
+    </div>
   );
 };
 

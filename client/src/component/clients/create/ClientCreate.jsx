@@ -7,7 +7,7 @@ import Navbar from "../../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown } from "react-bootstrap";
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const ClientCreate = () => {
   const [client, setClient] = useState({
@@ -36,7 +36,7 @@ const ClientCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiUrl}/api/clients/add`, client);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/clients/add`, client);
       console.log("Client added:", response.data);
       localStorage.setItem("clientRole", client.role); // Store role in local storage
       navigate("/clients"); // Redirect to clients list page after creation

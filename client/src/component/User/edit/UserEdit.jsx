@@ -7,7 +7,7 @@ import axios from "axios";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -20,7 +20,7 @@ const UserEdit = () => {
   useEffect(() => {
     const fetchuserDetails = async () => {
       try {
-        const res = await axios.get(`${apiUrl}/api/users/${id}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/${id}`);
         setUser(res.data);
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -41,7 +41,7 @@ const UserEdit = () => {
 
     try {
       const response = await axios.put(
-        `${apiUrl}/api/users/update/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/users/update/${id}`,
         user
       );
       if (response.status === 200) {

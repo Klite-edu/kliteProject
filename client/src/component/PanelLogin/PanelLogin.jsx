@@ -1,11 +1,8 @@
-
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./panellogin.css";
-import sidebarConfig from "../configs/Sidebarconfig"
+import sidebarConfig from "../configs/Sidebarconfig";
 
 const PanelLogin = () => {
   const [email, setEmail] = useState("");
@@ -16,33 +13,27 @@ const PanelLogin = () => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.post("http://localhost:5000/api/admin/login", { email, password });
-      const { token } = response.data;
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/admin/login`, { email, password });
+      const { token, userId, role } = response.data;
+  
+      // ✅ Store user details in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
-
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      localStorage.setItem("role", decodedToken.role);
-
-      const role = decodedToken.role;
-      console.log("role", role);
-
-      // Fetch sidebar configuration based on role
-      if (role) {
-        const config = sidebarConfig[role];  // Get sidebar config based on the role
-
-        if (config) {
-          // You can optionally use the sidebar config here
-          console.log("Sidebar Configuration:", config);
-        }
-
-        // Redirect to the first path of the sidebar for that role
-        const redirectPath = config && config[0].path;
-        navigate(redirectPath || "/");
-      }
+      localStorage.setItem("userId", userId); // Store User ID
+      localStorage.setItem("role", role);
+  
+      console.log("🔹 Stored User ID:", userId);
+      console.log("🔹 Stored Email:", email);
+      console.log("🔹 User Role:", role);
+  
+      // Redirect user based on role
+      const config = sidebarConfig[role]; // Fetch sidebar configuration
+      const redirectPath = config && config[0]?.path;
+      navigate(redirectPath || "/");
     } catch (error) {
+      console.error("❌ Login Error:", error);
       setError("Invalid email or password");
     }
   };
@@ -51,10 +42,11 @@ const PanelLogin = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/admin/register", { email, password });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/admin/register`, { email, password });
       alert("Registration successful! Please log in.");
       setIsRegistering(false); // Switch to login after successful registration
     } catch (error) {
+      console.error("❌ Registration Error:", error);
       setError("Error registering user");
     }
   };

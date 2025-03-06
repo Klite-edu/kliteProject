@@ -4,6 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const http = require("http");
 // const { Server } = require("socket.io");
+const db = require("./database/db");
+const {updateTaskFrequency} = require("./middlewares/TaskScheduler");
 
 // Import Routes
 const adminRoutes = require("./routes/Admin/adminRoutes");
@@ -19,16 +21,19 @@ const UserSubscriptionRoutes = require("./routes/Admin/UserSubscriptionRoute");
 const clientplanRoutes = require("./routes/clients/clientplanRoute");
 const ImpressionRoute = require("./routes/Admin/ImpressionRoute");
 const contactdataRoutes = require("./routes/clients/contactdataRoute");
-
-
+const attendenceRoutes = require("./routes/clients/attendence/attendence");
+const siteRoutes = require("./routes/clients/attendence/siteRoute");
+const taskRoutes = require("./routes/clients/checklist/taskRoutes");
 
 const app = express();
 const server = http.createServer(app);
-// const io = new Server(server, { cors: { origin: "*" } });
-
-// Middleware
-app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"], // Allow local frontend
+    credentials: true,
+  })
+);
 // app.use(trackApiCalls);
 // Routes
 app.use("/api", ImpressionRoute);
@@ -43,13 +48,14 @@ app.use("/api", SubscriptionRoutes);
 app.use("/api", UserSubscriptionRoutes);
 app.use("/api", clientplanRoutes);
 app.use("/api/employee", contactdataRoutes);
+app.use("/api/attendance", attendenceRoutes);
+app.use("/api", siteRoutes);
+app.use("/api/tasks", taskRoutes);
+
+updateTaskFrequency();
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
-
 
 // const express = require("express");
 // const jwt = require("jsonwebtoken");
@@ -157,4 +163,3 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // });
 
 // module.exports = router;
-

@@ -6,7 +6,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, CartesianGrid } from "recharts";
 import axios from "axios";
-const apiUrl = "http://localhost:5000";
+
 
 const AdminDashboard = () => {
 
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     // Fetch total clients and active clients data from the backend
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/clients/total-clients");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/total-clients`);
         setTotalClients(response.data.totalClients);
         setActiveClients(response.data.activeClients);
       } catch (error) {
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
 
     const fetchImpressions = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/totalimpressions");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/totalimpressions`);
         setTotalImpressions(response.data?.totalImpressions || 0); // Ensure a valid number
       } catch (error) {
         console.error("Error fetching impressions:", error);
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
     // Fetch monthly revenue data from the backend
     const fetchRevenueData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/clients/monthlyrevenue");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/monthlyrevenue`);
         console.log("Raw revenue data:", response.data);
 
         // Get the current year dynamically
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
 
     const fetchSubscriptionData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/clients/mostPurchasedPlans"); // Replace with your API route
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/clients/mostPurchasedPlans`); // Replace with your API route
         const data = await response.json();
         setSubscriptionDataBar(data);
       } catch (error) {
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
     };
     const fetchTransactions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/clients/transactionData"); // Replace with your API route
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/clients/transactionData`); // Replace with your API route
         const data = await response.json();
         setTransactions(data);
       } catch (error) {
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
 
     const fetchClients = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/clients/clientsubscriptions`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/clientsubscriptions`);
         console.log("✅ All Clients Response:", response.data);
         setClientData(response.data);
       } catch (error) {

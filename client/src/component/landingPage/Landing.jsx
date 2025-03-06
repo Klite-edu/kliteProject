@@ -4,7 +4,7 @@ import { FaCheckCircle, FaRegClock, FaUsers, FaShieldAlt } from "react-icons/fa"
 import { useParams } from "react-router-dom";
 import "./landing.css";
 
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const iconMap = {
     "check-circle": <FaCheckCircle />,
@@ -34,7 +34,7 @@ const Landing = () => {
         const fetchPlans = async () => {
             console.log("Fetching subscription plans...");
             try {
-                const res = await axios.get(`${apiUrl}/api/subscription`);
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/subscription`);
                 setPlans(res.data);
                 console.log("Subscription plans fetched:", res.data);
             } catch (error) {
@@ -75,7 +75,7 @@ const Landing = () => {
                 if (password) {
                     console.log("Registering user...");
                     try {
-                        const response = await axios.post(`${apiUrl}/api/clients/register`, {
+                        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/clients/register`, {
                             ...formData,
                             selectedPlan: selectedPlan.name,
                             selectedPlanId: selectedPlan._id,

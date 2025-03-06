@@ -7,7 +7,7 @@ import axios from "axios";
 import Sidebar from "../../Sidebar/Sidebar";
 import Navbar from "../../Navbar/Navbar";
 
-const apiUrl = "http://localhost:5000";
+// const apiUrl = "http://localhost:5000";
 
 const Clientedit = () => {
   const { id } = useParams();
@@ -20,7 +20,7 @@ const Clientedit = () => {
   useEffect(() => {
     const fetchClientDetails = async () => {
       try {
-        const res = await axios.get(`${apiUrl}/api/clients/${id}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/clients/${id}`);
         setClient(res.data);
       } catch (error) {
         console.error("Error fetching client details:", error);
@@ -41,7 +41,7 @@ const Clientedit = () => {
 
     try {
       const response = await axios.put(
-        `${apiUrl}/api/clients/update/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/clients/update/${id}`,
         client
       );
       if (response.status === 200) {
